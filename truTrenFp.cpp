@@ -1,0 +1,108 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+#define N 50
+long long p, w, a, b;
+
+void nhap()
+{
+	cout << "nhap p: ";
+	cin >> p;
+	cout << "nhap w: ";
+	cin >> w;
+	cout << "nhap a: ";
+	cin >> a;
+	cout << "nhap b: ";
+	cin >> b;
+	
+}
+
+int tinh_t()
+{
+	float m, t;
+	m = ceil(log2(p)) ; //cout << m << endl;
+	t = ceil(m/w ); // cout << t<< endl;
+//	for(int i = (t-1); i >= 0; i--)
+//	{
+//		uoc = (a/pow(2, i*w));
+//		a -= (pow(2, i*w)*uoc);
+//	//	cout << "a[" <<i<< "] = " << uoc <<  endl;
+//	}
+	return t;
+}
+
+
+void truTrenFp()
+{
+	int uoc, t, e = 0;
+	int f[N], g[N], h[N], c[N];
+	t = tinh_t();
+	//chuyen mang
+	for(int i = (t-1); i >= 0; i--)
+	{
+		uoc = a/int(pow(2, i*w));
+		a = a - (pow(2, i*w)*uoc);
+		f[i] = uoc;
+	}
+	
+	for(int i = (t-1); i >= 0; i--)
+	{
+		uoc = (b/int(pow(2, i*w)));
+		b = b - (pow(2, i*w)*uoc);
+		g[i] = uoc;	
+	}
+	
+		for(int i = (t-1); i >= 0; i--)
+	{
+		uoc = (p/int(pow(2, i*w)));
+		p = p - (pow(2, i*w)*uoc);
+		h[i] = uoc;	
+		if(uoc<0) uoc+=pow(2,i);
+		cout << "p[" <<i<< "] = " << uoc <<  endl;
+	}cout<<endl;
+	//tru tren fp
+	for(int i = 0; i <= t-1; i++)
+	{
+		int sub;
+		sub = f[i] - g[i] - e;
+		c[i] = sub%int(pow(2, w));
+		if(sub >= pow(2, w) || sub < 0) 
+		{
+			e = 1;
+			if(sub < 0)
+				c[i] += pow(2, w);
+		}
+		else e = 0;
+		cout << "c[" << i << "] = " << c[i] << ", e = " << e << endl;
+	}
+	cout << endl;
+	//neu e = 1
+	
+	if(e == 1)
+	{
+		cout<< endl<< "tru tren fp:" << endl;
+		e = 0;
+		for(int i = 0; i <= t-1; i++)
+		{
+		
+			int add;
+			add = c[i] + h[i] + e;
+			c[i] = add%int(pow(2, w));
+			if(add >= pow(2,w))
+				e = 1;
+			else e = 0;
+			cout << "c[" << i << "] = " << c[i] << ", e = " << e << endl;
+		}
+	}
+}
+
+
+int main()
+{
+	nhap();
+	truTrenFp();
+	
+	return 0;
+	
+}
